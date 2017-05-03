@@ -4,6 +4,7 @@ import atexit
 import logging
 import json
 import sys
+from grove_i2c_temp_hum_hdc1000 import HDC1000
 
 class SensorValue(object):
     unit = ''
@@ -20,20 +21,30 @@ class SensorValue(object):
         self.location = location
 
     def writecsv(self):
-        return self.location + "," + self.sensor + "," + self.timestamp + "," + self.value + "," + self.unit 
+	        return self.location + "," + self.sensor + "," + self.timestamp + "," + self.value + "," + self.unit 
 
 def main():
-    # how do i manage the interval of all of the sensors?
+	    # how do i manage the interval of all of the sensors?
     # i could just set it up as as a chron job and then either write the value to a file or a web service.
+
+
+    hdc = HDC1000()
+    hdc.Config()
 
     sound_sensor_pin = 4 
     air_sensor_pin = 0
     sensor_polling_interval = 10
 
-    location = 'Jonseaddustsensor() Office'
+    location = 'Jons Office'
 
     sensorcollection = []
 
+    while 1:
+        print('Temp    : %.2f C' % hdc.Temperature())
+        print('Humidity: %.2f %%' % hdc.Humidity())
+        print('-' * 17)
+        time.sleep(1)
+        
     #while True:
     #    sound_data = getsoundinfo(location, sound_sensor_pin)
     #    print sound_data
@@ -41,9 +52,9 @@ def main():
     #    writetofile(data)
     #    time.sleep(sensor_polling_interval)
 
+    # getairqualitysensorvalue(air_sensor_pin)
+    
 
-
-    readdustsensor()
     # getairqualityseaddustsensor()eaddustsensor()ensorvalue()
 
 
@@ -70,23 +81,6 @@ def getsoundinfo(location, sound_sensor):
     except IOError:
         print ("Error")
 
-
-
-def readdustsensor():
-    atexit.register(grovepi.dust_sensor_dis)
-
-    print("Reading from the dust sensor")
-    grovepi.dust_sensor_en()
-    while True:
-        try:
-                    [new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
-                    if new_val:
-                            print(lowpulseoccupancy)
-                    time.sleep(5) 
-
-        except IOError:
-            print ("Error")
-            
         
 
 def getairqualitysensorvalue(air_sensor_pin):
