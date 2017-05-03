@@ -2,9 +2,37 @@ import time
 import grovepi
 import atexit
 import logging
+import json
+import time.sleep as sleep
+import sys
 
+class SensorValue:
+    unit = ''
+    value = ''
+    timestamp = ''
+    sensor = ''
+    location = ''
+
+    def __init__(self, value, unit, timestamp, sensor, location):
+        self.unit = unit
+        self.value = value
+        self.timestamp = timestamp
+        self.sensor = sensor
+        self.location = location
+     
 
 def main():
+    
+    # how do i manage the interval of all of the sensors?
+    # i could just set it up as as a chron job and then either write the value to a file or a web service.
+
+    
+
+
+
+
+    
+    location = 'Jons Office'
     logger = logging.getLogger('indoorhealthmonitor')
     logger.setLevel(logging.INFO)
 
@@ -37,6 +65,24 @@ def getlightinfo():
 
 def getgasinfo():
     return 100
+
+def getsoundinfo():
+    try:
+        # Read the sound level
+        sensor_value = grovepi.analogRead(sound_sensor)
+
+        # If loud, illuminate LED, otherwise dim
+        if sensor_value > threshold_value:
+            grovepi.digitalWrite(led,1)
+        else:
+            grovepi.digitalWrite(led,0)
+
+        print("sensor_value = %d" %sensor_value)
+        time.sleep(.5)
+
+    except IOError:
+        print ("Error")
+
 
 
 def readdustsensor():
