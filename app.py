@@ -3,7 +3,6 @@ import grovepi
 import atexit
 import logging
 import json
-import time.sleep as sleep
 import sys
 
 class SensorValue(object):
@@ -22,39 +21,30 @@ class SensorValue(object):
 
     def writecsv(self):
         return self.location + "," + self.sensor + "," + self.timestamp + "," + self.value + "," + self.unit 
-     
 
 def main():
-    
     # how do i manage the interval of all of the sensors?
     # i could just set it up as as a chron job and then either write the value to a file or a web service.
 
     sound_sensor_pin = 4 
     air_sensor_pin = 0
-
     sensor_polling_interval = 10
 
-    location = 'Jons Office'
+    location = 'Jonseaddustsensor() Office'
 
     sensorcollection = []
 
-    while True:
-
-        sound_data = getsoundinfo(location, sound_sensor_pin)
-        print sound_data
-        sensorcollection.append(sound_data)
-
-
-
-
-
-        writetofile(data)
-        time.sleep(sensor_polling_interval)
+    #while True:
+    #    sound_data = getsoundinfo(location, sound_sensor_pin)
+    #    print sound_data
+    #    sensorcollection.append(sound_data)
+    #    writetofile(data)
+    #    time.sleep(sensor_polling_interval)
 
 
 
-    # readdustsensor()
-    # getairqualitysensorvalue()
+    readdustsensor()
+    # getairqualityseaddustsensor()eaddustsensor()ensorvalue()
 
 
 def writetofile(data):
@@ -77,26 +67,26 @@ def getsoundinfo(location, sound_sensor):
         # Read the sound level
         sensor_value = grovepi.analogRead(sound_sensor)
         return SensorValue(sensor_value, 'none', 'Sound', location)
-
     except IOError:
         print ("Error")
 
 
 
 def readdustsensor():
+    atexit.register(grovepi.dust_sensor_dis)
+
     print("Reading from the dust sensor")
     grovepi.dust_sensor_en()
     while True:
         try:
-            [new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
-            print grovepi.dustSensorRead()
-            if new_val:
-                print(lowpulseoccupancy)
-                logging.info('Dust Sensor Value: ' + str(lowpulseoccupancy))
-            time.sleep(5) 
+                    [new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
+                    if new_val:
+                            print(lowpulseoccupancy)
+                    time.sleep(5) 
 
         except IOError:
             print ("Error")
+            
         
 
 def getairqualitysensorvalue(air_sensor_pin):
