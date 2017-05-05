@@ -1,0 +1,6 @@
+core: 
+  location: Office
+  logfile: sensorlog.log
+soundsensor:
+  port: 2
+

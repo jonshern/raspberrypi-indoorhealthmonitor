@@ -5,25 +5,12 @@ import logging
 import json
 import sys
 import datetime
+import sensorvalue
 
-class SensorValue(object):
-    unit = ''
-    value = ''
-    timestamp = ''
-    sensor = ''
-    location = ''
 
-    def __init__(self, value, unit, sensor, location):
-        self.unit = unit
-        self.value = value
-        self.timestamp = datetime.datetime.now()
-        self.sensor = sensor
-        self.location = location
-
-    def writecsv(self):
-        return self.location + "," + self.sensor + "," + str(self.timestamp) + "," + str(self.value) + "," + self.unit 
 
 def main():
+    starttime 
     location = 'Jons Office'
     readdustsensor(location)
 
@@ -49,7 +36,6 @@ def readdustsensor(location):
         except IOError:
             print ("Error")
             
-        
 if __name__ == '__main__':
     main()
 

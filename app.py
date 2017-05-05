@@ -5,26 +5,16 @@ import logging
 import json
 import time.sleep as sleep
 import sys
+import sensorvalue
+from config import settings
+from datetime import datetime
 
-class SensorValue(object):
-    unit = ''
-    value = ''
-    timestamp = ''
-    sensor = ''
-    location = ''
 
-    def __init__(self, value, unit, sensor, location):
-        self.unit = unit
-        self.value = value
-        self.timestamp = datetime.datetime.now()
-        self.sensor = sensor
-        self.location = location
-
-    def writecsv(self):
-        return self.location + "," + self.sensor + "," + str(self.timestamp) + "," + str(self.value) + "," + self.unit 
 
 def main():
     
+    sensordatafile = getsensorfilename()
+
     # how do i manage the interval of all of the sensors?
     # i could just set it up as as a chron job and then either write the value to a file or a web service.
 
@@ -36,13 +26,7 @@ def main():
     # Connect the Grove Gas Sensor to analog port A0
     # SIG,NC,VCC,GND
     gas_sensor = 0
-
-
-
     light_sensor = 0 
-    
-
-
 
     location = 'Jons Office'
 
@@ -54,16 +38,8 @@ def main():
         # https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_gas_sensor.py
 
 
-
-
-
-
-def gettempandhumidity():
-    return 10
-
-
-def getlightinfo():
-    return 10
+def getsensorfilename():
+    return "sensorlog" + datetime.now().strftime('%Y%m%d%H%M%S') + ".log" 
 
 
 def getloudnessinfo(loudness_sensor_pin):
