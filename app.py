@@ -91,7 +91,7 @@ def sensortest(sensorname, pin, enablemocking):
         # value = getairqualitysensorvalue(pin)
         # print value
     if sensorname == "gas":
-        value = getgassensorvalue(p(in)
+        value = getgassensorvalue(pin)
         print value.writecsv()
     if sensorname == "tempandhumidity":
         value = gettempandhumidity(pin)
