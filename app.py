@@ -16,7 +16,7 @@ from config import settings
 def main():
     
     sensordatafile = getsensorfilename()
-    supportedsenors = ['loudness', 'airquality', 'gas', 'tempandhumidity', 'dust']
+    supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity', 'dust']
     
     parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
@@ -29,19 +29,14 @@ def main():
 
     parser.print_usage()
 
-
-    sensordata = SensorValue(5, 'none', 'Loudness', 'location')
-    print sensordata.yaml()
-
-
     mockingmode = False
     if args['mock']:
         mockingmode = True
 
     if args['poll']:
-            startautopolling(supportedsenors, mockingmode)
+            startautopolling(supportedsensors, mockingmode)
 
-    if args['sensortest'] in supportedsenors:
+    if args['sensortest'] in supportedsensors:
         sensordata = getsensordata(args['sensortest'], mockingmode)
 
         if sensordata == None:
@@ -49,16 +44,16 @@ def main():
         else:
             print sensordata.yaml()
 
-    if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsenors:
+    if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsensors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
         print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
-        print 'supported sensors: ' + str(supportedsenors)
+        print 'supported sensors: ' + str(supportedsensors)
 
     if args['sensortest'] == "all":
-        print "Testing all sensors"
-        for item in supportedsenors:
-            pin = getsensorconfig(item)
-            getsensordata(item, mockingmode)
+        print "Looping through the sensors " + str(supportedsensors)
+        for item in supportedsensors:
+            data = getsensordata(item, mockingmode)
+            print data.yaml()
 
 
 
@@ -197,8 +192,6 @@ def getgassensorvalue(sensorname):
 
         # Calculate gas density - large value means more dense gas
         density = (float)(sensor_value / 1024)
-
-        print("sensor_value =", sensor_value, " density =", density)
         sensordata = SensorValue(sensor_value, 'none', 'Gas', 'location')
 
     except IOError:
@@ -224,10 +217,7 @@ def getairqualitysensorvalue(sensorname):
             print ("Low pollution")
         else:
             print ("Air fresh")
-
         sensordata = SensorValue(sensor_value, 'none', 'airquality', 'location')
-        print("sensor_value =", sensor_value)
-
     except IOError:
         print ("Error")
         
