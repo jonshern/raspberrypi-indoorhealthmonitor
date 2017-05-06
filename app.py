@@ -84,15 +84,15 @@ def sensortest(sensorname, pin, enablemocking):
         
     if sensorname == "loudness":
         value = getloudnessinfo(pin)
-        print value
+        print value.writecsv()
     if sensorname == "airquality":
 
         airqualitysensorvalueoriginal()
         # value = getairqualitysensorvalue(pin)
         # print value
     if sensorname == "gas":
-        value = getgassensorvalue(pin)
-        print value
+        value = getgassensorvalue(p(in)
+        print value.writecsv()
     if sensorname == "tempandhumidity":
         value = gettempandhumidity(pin)
         print value
@@ -135,7 +135,7 @@ def getloudnessinfo(pin):
     except IOError:
         print ("Error")
     
-    return str(sensordata)
+    return sensordata
 
 
 def getgassensorvalue(pin):
@@ -154,7 +154,7 @@ def getgassensorvalue(pin):
     except IOError:
         print ("Error")
 
-    return str(sensordata)
+    return sensordata
 
 
 
