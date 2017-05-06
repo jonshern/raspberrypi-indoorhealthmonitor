@@ -10,7 +10,6 @@ import sensorvalue
 
 
 def main():
-    starttime 
     location = 'Jons Office'
     readdustsensor(location)
 
