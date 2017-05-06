@@ -1,6 +1,27 @@
 core: 
   location: Office
   logfile: sensorlog.log
+  sensors:
+    - loudness
+    - airquality
+    - light
+    - gas
+    - tempandhumidity
+
 soundsensor:
   port: 2
+
+loudness: 
+  port: 3
+
+airquality:
+  port: 4
+
+gas:
+  port: 2
+
+tempandhumidity:
+  port: 3
+
+
 

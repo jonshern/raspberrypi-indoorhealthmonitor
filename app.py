@@ -10,16 +10,15 @@ from datetime import datetime
 
 
 
+
 def main():
     
     sensordatafile = getsensorfilename()
-    supportedsenors = ['Loudness', 'AirQuality','Light', 'Gas', 'TempAndHumidity']
+    supportedsenors = ['loudness', 'airquality','light', 'gas', 'tempandhumidity']
     
 
 
-
-    parser = argparse.ArgumentParser(
-    description='Get Sensor Data')
+    parser = argparse.ArgumentParser(description='Get Sensor Data')
     parser.add_argument(
         '-p', '--poll', help='Poll all sensors in the config file at the configured interval', action='store_true')
 
@@ -35,10 +34,14 @@ def main():
         print 'supported sensors:'
         print supportedsenors
     elif args['sensortest'] != 'nosensor':
+
+
         sensortest(args['sensortest'])
     else:
         print 'No arguments were specified so nothing will be done'
-    
+
+
+
 
     # how do i manage the interval of all of the sensors?
     # i could just set it up as as a chron job and then either write the value to a file or a web service.
@@ -55,22 +58,36 @@ def main():
 
     location = 'Jons Office'
 
+def getsensorconfig(sensorname):
+    if sensorname in settings.keys():
+        print sensorname + " is configured for port " + str(settings[sensorname]["port"])
 
+        return settings[sensorname]["port"]
+    else:
+        print "missing config value for " + sensorname
+
+    
+    
 
 def sensortest(sensorname):
+
+    if sensorname in settings.keys():
+        print sensorname + " is configured for port " + str(settings["loudness"]["port"])
+    else:
+        print "missing config value for " + sensorname
+    
+
     print 'Testing the sensor' + sensorname
-
-    if sensorname == "Loudness":
-        print getloudnessinfo(1)
-    if sensorname == "AirQuality":
+    if sensorname == "loudness":
+        # print getloudnessinfo(1)
+    if sensorname == "airquality":
         print getairqualitysensorvalue()
-    if sensorname == "Gas":
+    if sensorname == "gas":
         print getgassensorvalue("something", 1)
-    if sensorname == "TempAndHumidity":
+    if sensorname == "tempandhumidity":
         print "Temperature and Humidity"
-    if sensorname == "Light":
+    if sensorname == "light":
         print "Light Sensor"
-
 
 
 
