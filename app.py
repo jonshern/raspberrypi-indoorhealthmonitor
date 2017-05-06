@@ -42,9 +42,8 @@ def main():
             startautopolling(supportedsenors, mockingmode)
 
     if args['sensortest'] in supportedsenors:
-        pin = getsensorconfig(args['sensortest'])
         sensordata = getsensordata(args['sensortest'], mockingmode)
-        
+
         if sensordata == None:
             print 'No data was returned by the sensor'
         else:
@@ -151,7 +150,7 @@ def readdustsensor(sensorname):
             
 
 
-def gettempandhumidity(senorname):
+def gettempandhumidity(sensorname):
     
     pin = getsensorconfig(sensorname)
 
