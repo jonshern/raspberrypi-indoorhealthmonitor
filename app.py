@@ -31,7 +31,7 @@ def main():
 
 
     sensordata = SensorValue(5, 'none', 'Loudness', 'location')
-    print (sensordata)
+    print sensordata.yaml()
 
 
     mockingmode = False
@@ -84,16 +84,17 @@ def sensortest(sensorname, pin, enablemocking):
         
     if sensorname == "loudness":
         value = getloudnessinfo(pin)
-        print value.writecsv()
+        print value.yaml()
     if sensorname == "airquality":
         value = getairqualitysensorvalue(pin)
-        print value.writecsv()
+        print value.yaml()
     if sensorname == "gas":
         value = getgassensorvalue(pin)
-        print value.writecsv()
+        print value.yaml()
     if sensorname == "tempandhumidity":
-        value = gettempandhumidity(pin)
-        print value
+        values = gettempandhumidity(pin)
+        for item in values:
+            print item.yaml()
     if sensorname == "light":
         print "Light Sensor"
 
@@ -118,10 +119,14 @@ def gettempandhumidity(pin):
     try:
         [temp,humidity] = grovepi.dht(pin,1)
         print "temp =", temp, " humidity =", humidity
+        
+        sensordata = []
+        sensordata.append(SensorValue(temp, 'none', 'temp', 'location'))
+        sensordata.append(SensorValue(humidity, 'none', 'humidity', 'location'))
 
     except IOError:
         print "Error"
-    return (temp, humidity)
+    return sensordata
     
 
 def getloudnessinfo(pin):
