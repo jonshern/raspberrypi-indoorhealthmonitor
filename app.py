@@ -45,7 +45,7 @@ def main():
         pin = getsensorconfig(args['sensortest'])
         sensortest(args['sensortest'], pin, mockingmode)
 
-    if args['sensortest'] in ['nosensor', 'all'] or args['sensortest'] not in supportedsenors:
+    if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsenors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
         print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
         print 'supported sensors: ' + str(supportedsenors)
