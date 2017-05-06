@@ -13,8 +13,6 @@ from datetime import datetime
 from sensorvalue import SensorValue
 from config import settings
 
-sensorfilename = getsensorfilename()
-
 def main():
     
     sensordatafile = getsensorfilename()
