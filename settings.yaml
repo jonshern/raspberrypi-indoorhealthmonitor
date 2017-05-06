@@ -8,19 +8,24 @@ core:
     - gas
     - tempandhumidity
 
-soundsensor:
-  port: 2
-
-loudness: 
-  port: 3
+light: 
+  # Uses a digital port
+  port: 5
 
 airquality:
-  port: 4
+  # Uses an analog port so if port was 0 it would A0
+  port: 0
+
+loudness: 
+  # Uses an analog port so if port was 0 it would A0
+  port: 1
 
 gas:
+  # Uses an analog port
   port: 2
 
 tempandhumidity:
+  #Uses a digital port so if the port was 3 it would D3
   port: 3
 
 

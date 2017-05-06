@@ -3,60 +3,52 @@ import grovepi
 import atexit
 import json
 import sys
-import sensorvalue
+
 import argparse
-from config import settings
+
 from datetime import datetime
 
 
-
+# get import working from a directory
+import sensorvalue
+from config import settings
 
 def main():
     
     sensordatafile = getsensorfilename()
     supportedsenors = ['loudness', 'airquality','light', 'gas', 'tempandhumidity']
     
-
-
-    parser = argparse.ArgumentParser(description='Get Sensor Data')
+    parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
         '-p', '--poll', help='Poll all sensors in the config file at the configured interval', action='store_true')
 
-    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test', default='nosensor')
+    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test. Supported sensors: ' + str(supportedsenors), default='nosensor')
+
+    parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
     args = vars(parser.parse_args())
 
-    print len(args)
+    parser.print_usage()
+
+    mockingmode = False
+    if args['mock']:
+        mockingmode = True
 
     if args['poll']:
             startautopolling()
-    elif args['sensortest'] == 'nosensor':
-        print 'Please specify a sensor name'
-        print 'supported sensors:'
-        print supportedsenors
-    elif args['sensortest'] != 'nosensor':
 
+    if args['sensortest'] in supportedsenors:
+        pin = getsensorconfig(args['sensortest'])
+        sensortest(args['sensortest'], pin, mockingmode)
 
-        sensortest(args['sensortest'])
+    if args['sensortest'] != "nosensor" and args['sensortest'] not in supportedsenors:
+        print 'the sensor ' +  args['sensortest'] + ' is not supported'
+        print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
+        print 'supported sensors: ' + str(supportedsenors)
+
     else:
-        print 'No arguments were specified so nothing will be done'
+        print 'Sensor Test or Autopolling was not specified so nothing is going to be done'
 
 
-
-
-    # how do i manage the interval of all of the sensors?
-    # i could just set it up as as a chron job and then either write the value to a file or a web service.
-
-    # define ports each sensor will use.
-
-    #get hooked up to analog port
-    loudness_sensor_pin = 0
-
-    # Connect the Grove Gas Sensor to analog port A0
-    # SIG,NC,VCC,GND
-    gas_sensor = 0
-    light_sensor = 0 
-
-    location = 'Jons Office'
 
 def getsensorconfig(sensorname):
     if sensorname in settings.keys():
@@ -69,23 +61,31 @@ def getsensorconfig(sensorname):
     
     
 
-def sensortest(sensorname):
+def sensortest(sensorname, pin, enablemocking):
 
-    if sensorname in settings.keys():
-        print sensorname + " is configured for port " + str(settings["loudness"]["port"])
-    else:
-        print "missing config value for " + sensorname
+    print 'Testing ' + sensorname + ' on port ' + str(pin)
     
+    if pin is None:
+        print "No Pin defined in the config"
+        print "exiting"
+        return
 
-    print 'Testing the sensor' + sensorname
+    if enablemocking:
+        return
+
+        
     if sensorname == "loudness":
-        # print getloudnessinfo(1)
+        value = getloudnessinfo(pin)
+        print value
     if sensorname == "airquality":
-        print getairqualitysensorvalue()
+        value = getairqualitysensorvalue(pin)
+        print value
     if sensorname == "gas":
-        print getgassensorvalue("something", 1)
+        value = getgassensorvalue(pin)
+        print value
     if sensorname == "tempandhumidity":
-        print "Temperature and Humidity"
+        value = gettempandhumidity(pin)
+        print value
     if sensorname == "light":
         print "Light Sensor"
 
@@ -93,8 +93,9 @@ def sensortest(sensorname):
 
 def startautopolling():
     while True:
-        getairqualitysensorvalue()
-        getgassensorvalue(location, gas_sensor_pin)
+        print "autopolling"
+        # getairqualitysensorvalue()
+        # getgassensorvalue(location, gas_sensor_pin)
         # https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_gas_sensor.py
 
 
@@ -103,20 +104,33 @@ def getsensorfilename():
     return "sensorlog" + datetime.now().strftime('%Y%m%d%H%M%S') + ".log" 
 
 
-def getloudnessinfo(loudness_sensor_pin):
+
+def gettempandhumidity(pin):
+
+    try:
+        [temp,humidity] = grovepi.dht(pin,1)
+        print "temp =", temp, " humidity =", humidity
+
+    except IOError:
+        print "Error"
+    return (temp, humidity)
+    
+
+def getloudnessinfo(pin):
     try:
         # Read the sound level
-        sensor_value = grovepi.analogRead(loudness_sensor)
-        sensordata = SensorValue(sensor_value, 'none', 'Loudness', location)
-        writetofile(sensordata)
+        sensor_value = grovepi.analogRead(pin)
+        sensordata = SensorValue(sensor_value, 'none', 'Loudness', 'location')
     
     except IOError:
         print ("Error")
-
-
-def getgassensorvalue(location, gas_sensor_pin):
     
-    grovepi.pinMode(gas_sensor_pin,"INPUT")
+    return sensordata
+
+
+def getgassensorvalue(pin):
+    
+    grovepi.pinMode(pin,"INPUT")
     try:
         # Get sensor value
         sensor_value = grovepi.analogRead(gas_sensor)
@@ -125,18 +139,18 @@ def getgassensorvalue(location, gas_sensor_pin):
         density = (float)(sensor_value / 1024)
 
         print("sensor_value =", sensor_value, " density =", density)
-        sensordata = SensorValue(sensor_value, 'none', 'Gas', location)
-        writetofile(sensordata)
+        sensordata = SensorValue(sensor_value, 'none', 'Gas', 'location')
 
     except IOError:
         print ("Error")
 
+    return sensordata
 
 
-def getairqualitysensorvalue():
-    air_sensor = 0
 
-    grovepi.pinMode(air_sensor,"INPUT")
+def getairqualitysensorvalue(pin):
+
+    grovepi.pinMode(pin,"INPUT")
 
     while True:
         try:
@@ -155,6 +169,8 @@ def getairqualitysensorvalue():
 
         except IOError:
             print ("Error")
+        
+        return sensor_value
 
 
 
