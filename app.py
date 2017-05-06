@@ -16,7 +16,7 @@ from config import settings
 def main():
     
     sensordatafile = getsensorfilename()
-    supportedsenors = ['loudness', 'airquality','light', 'gas', 'tempandhumidity']
+    supportedsenors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
     
     parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
@@ -39,7 +39,7 @@ def main():
         mockingmode = True
 
     if args['poll']:
-            startautopolling()
+            startautopolling(supportedsenors)
 
     if args['sensortest'] in supportedsenors:
         pin = getsensorconfig(args['sensortest'])
@@ -65,44 +65,40 @@ def getsensorconfig(sensorname):
         return settings[sensorname]["port"]
     else:
         print "missing config value for " + sensorname
+        return
 
     
     
 
-def sensortest(sensorname, pin, enablemocking):
+def getsensordata(sensorname, enablemocking):
 
     print 'Testing ' + sensorname + ' on port ' + str(pin)
     
-    if pin is None:
-        print "No Pin defined in the config"
-        print "exiting"
-        return
+
 
     if enablemocking:
         return
 
-        
     if sensorname == "loudness":
-        value = getloudnessinfo(pin)
-        print value.yaml()
+        return getloudnessinfo(sensorname)
     if sensorname == "airquality":
-        value = getairqualitysensorvalue(pin)
-        print value.yaml()
+        return getairqualitysensorvalue(sensorname)
     if sensorname == "gas":
-        value = getgassensorvalue(pin)
-        print value.yaml()
+        return getgassensorvalue(sensorname)
     if sensorname == "tempandhumidity":
-        values = gettempandhumidity(pin)
-        for item in values:
-            print item.yaml()
-    if sensorname == "light":
-        print "Light Sensor"
+        return gettempandhumidity(sensorname)
 
 
-
-def startautopolling():
+def startautopolling(supportedsenors):
     while True:
         print "autopolling"
+
+        for item in supportedsenors:
+            
+        
+        values.append(getloudnessinfo(pin))
+
+
         # getairqualitysensorvalue()
         # getgassensorvalue(location, gas_sensor_pin)
         # https://github.com/DexterInd/GrovePi/blob/master/Software/Python/grove_gas_sensor.py
@@ -114,7 +110,9 @@ def getsensorfilename():
 
 
 
-def gettempandhumidity(pin):
+def gettempandhumidity(senorname):
+    
+    pin = getsensorconfig(sensorname)
 
     try:
         [temp,humidity] = grovepi.dht(pin,1)
@@ -129,7 +127,9 @@ def gettempandhumidity(pin):
     return sensordata
     
 
-def getloudnessinfo(pin):
+def getloudnessinfo(sensorname):
+    
+    pin = getsensorconfig(sensorname)
     try:
         # Read the sound level
         sensor_value = grovepi.analogRead(pin)
@@ -141,7 +141,9 @@ def getloudnessinfo(pin):
     return sensordata
 
 
-def getgassensorvalue(pin):
+def getgassensorvalue(sensorname):
+    
+    pin = getsensorconfig(sensorname)
     
     grovepi.pinMode(pin,"INPUT")
     try:
@@ -161,7 +163,9 @@ def getgassensorvalue(pin):
 
 
 
-def getairqualitysensorvalue(pin):
+def getairqualitysensorvalue(sensorname):
+    
+    pin = getsensorconfig(sensorname)
 
     grovepi.pinMode(pin,"INPUT")
 
@@ -183,30 +187,6 @@ def getairqualitysensorvalue(pin):
         print ("Error")
         
     return sensordata
-
-
-def airqualitysensorvalueoriginal():
-    air_sensor = 0
-
-    grovepi.pinMode(air_sensor,"INPUT")
-
-    while True:
-        try:
-            # Get sensor value
-            sensor_value = grovepi.analogRead(air_sensor)
-
-            if sensor_value > 700:
-                print ("High pollution")
-            elif sensor_value > 300:
-                print ("Low pollution")
-            else:
-                print ("Air fresh")
-
-            print("sensor_value =", sensor_value)
-            time.sleep(.5)
-
-        except IOError:
-            print ("Error")
 
 
 if __name__ == '__main__':
