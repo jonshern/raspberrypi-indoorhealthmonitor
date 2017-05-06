@@ -125,7 +125,7 @@ def getloudnessinfo(pin):
     except IOError:
         print ("Error")
     
-    return sensordata
+    return str(sensordata)
 
 
 def getgassensorvalue(pin):
@@ -133,7 +133,7 @@ def getgassensorvalue(pin):
     grovepi.pinMode(pin,"INPUT")
     try:
         # Get sensor value
-        sensor_value = grovepi.analogRead(gas_sensor)
+        sensor_value = grovepi.analogRead(pin)
 
         # Calculate gas density - large value means more dense gas
         density = (float)(sensor_value / 1024)
@@ -144,7 +144,7 @@ def getgassensorvalue(pin):
     except IOError:
         print ("Error")
 
-    return sensordata
+    return str(sensordata)
 
 
 
@@ -152,25 +152,23 @@ def getairqualitysensorvalue(pin):
 
     grovepi.pinMode(pin,"INPUT")
 
-    while True:
-        try:
-            # Get sensor value
-            sensor_value = grovepi.analogRead(pin)
+    try:
+        # Get sensor value
+        sensor_value = grovepi.analogRead(pin)
 
-            if sensor_value > 700:
-                print ("High pollution")
-            elif sensor_value > 300:
-                print ("Low pollution")
-            else:
-                print ("Air fresh")
+        if sensor_value > 700:
+            print ("High pollution")
+        elif sensor_value > 300:
+            print ("Low pollution")
+        else:
+            print ("Air fresh")
 
-            print("sensor_value =", sensor_value)
-            time.sleep(.5)
+        print("sensor_value =", sensor_value)
 
-        except IOError:
-            print ("Error")
+    except IOError:
+        print ("Error")
         
-        return sensor_value
+        return str(sensor_value)
 
 
 
