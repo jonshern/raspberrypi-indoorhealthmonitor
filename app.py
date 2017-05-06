@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 # get import working from a directory
-import sensorvalue
+from sensorvalue import SensorValue
 from config import settings
 
 def main():
@@ -28,6 +28,11 @@ def main():
     args = vars(parser.parse_args())
 
     parser.print_usage()
+
+
+    sensordata = SensorValue(5, 'none', 'Loudness', 'location')
+    print (sensordata)
+
 
     mockingmode = False
     if args['mock']:
