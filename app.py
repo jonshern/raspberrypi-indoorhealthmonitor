@@ -73,7 +73,6 @@ def getsensorconfig(sensorname):
 
 def getsensordata(sensorname, enablemocking):
 
-    print 'Testing ' + sensorname + ' on port ' + str(pin)
     
     if enablemocking:
         return
