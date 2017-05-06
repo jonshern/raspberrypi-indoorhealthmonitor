@@ -22,7 +22,7 @@ def main():
     parser.add_argument(
         '-p', '--poll', help='Poll all sensors in the config file at the configured interval', action='store_true')
 
-    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test. Supported sensors: ' + str(supportedsenors), default='nosensor')
+    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test. Supported sensors: ' + str(supportedsensors), default='nosensor')
 
     parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
     args = vars(parser.parse_args())
