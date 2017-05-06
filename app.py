@@ -86,10 +86,8 @@ def sensortest(sensorname, pin, enablemocking):
         value = getloudnessinfo(pin)
         print value.writecsv()
     if sensorname == "airquality":
-
-        airqualitysensorvalueoriginal()
-        # value = getairqualitysensorvalue(pin)
-        # print value
+        value = getairqualitysensorvalue(pin)
+        print value.writecsv()
     if sensorname == "gas":
         value = getgassensorvalue(pin)
         print value.writecsv()
@@ -173,12 +171,13 @@ def getairqualitysensorvalue(pin):
         else:
             print ("Air fresh")
 
+        sensordata = SensorValue(sensor_value, 'none', 'airquality', 'location')
         print("sensor_value =", sensor_value)
 
     except IOError:
         print ("Error")
         
-        return str(sensor_value)
+    return sensordata
 
 
 def airqualitysensorvalueoriginal():
