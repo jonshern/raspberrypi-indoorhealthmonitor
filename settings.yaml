@@ -9,6 +9,7 @@ core:
     - light
     - gas
     - tempandhumidity
+    - dust
 
 light: 
   # Uses a digital port
@@ -24,6 +25,10 @@ loudness:
 
 gas:
   # Uses an analog port
+  port: 2
+
+dust:
+  # this is fixed at port d2
   port: 2
 
 tempandhumidity:
