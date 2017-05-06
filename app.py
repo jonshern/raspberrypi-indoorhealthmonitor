@@ -13,10 +13,12 @@ from datetime import datetime
 from sensorvalue import SensorValue
 from config import settings
 
+sensorfilename = getsensorfilename()
+
 def main():
     
     sensordatafile = getsensorfilename()
-    supportedsenors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
+    supportedsenors = ['loudness', 'airquality', 'gas', 'tempandhumidity', 'dust']
     
     parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
@@ -39,11 +41,12 @@ def main():
         mockingmode = True
 
     if args['poll']:
-            startautopolling(supportedsenors)
+            startautopolling(supportedsenors, mockingmode)
 
     if args['sensortest'] in supportedsenors:
         pin = getsensorconfig(args['sensortest'])
-        sensortest(args['sensortest'], pin, mockingmode)
+        sensordata = getsensordata(args['sensortest'], mockingmode)
+        print sensordata.yaml()
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsenors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
@@ -54,7 +57,7 @@ def main():
         print "Testing all sensors"
         for item in supportedsenors:
             pin = getsensorconfig(item)
-            sensortest(item, pin, mockingmode)
+            getsensordata(item, mockingmode)
 
 
 
@@ -74,8 +77,6 @@ def getsensordata(sensorname, enablemocking):
 
     print 'Testing ' + sensorname + ' on port ' + str(pin)
     
-
-
     if enablemocking:
         return
 
@@ -87,17 +88,31 @@ def getsensordata(sensorname, enablemocking):
         return getgassensorvalue(sensorname)
     if sensorname == "tempandhumidity":
         return gettempandhumidity(sensorname)
+    if sensorname == "dust":
+        return readdustsensor(sensorname)
 
 
-def startautopolling(supportedsenors):
+def startautopolling(supportedsenors, enablemocking):
+    
+    print "Starting to Autopoll the sensors"
+    pollinginterval = settings["core"]["pollinginterval"]
+
+    #start the polling loop
     while True:
-        print "autopolling"
+        if pollingintervalue != settings["core"]["pollinginterval"]:
+            print "polling interval changed from " + str(pollinginterval) + " to " + settings["core"]["pollinginterval"]
+            pollinginterval = settings["core"]["pollinginterval"]
+        
+        #check for a new polling interval
 
         for item in supportedsenors:
-            
-        
-        values.append(getloudnessinfo(pin))
+            values.append(getsensordata(item, enablemocking))
 
+        writetofile(values)
+
+        time.sleep(pollinginterval)
+
+    
 
         # getairqualitysensorvalue()
         # getgassensorvalue(location, gas_sensor_pin)
@@ -105,14 +120,40 @@ def startautopolling(supportedsenors):
 
 
 
+def writetofile(data):
+    with open(sensorfilename, 'ab') as f:
+        for item in data:
+            f.write(item.writecsv() + '\n')
+
+
 def getsensorfilename():
     return "sensorlog" + datetime.now().strftime('%Y%m%d%H%M%S') + ".log" 
 
+
+def readdustsensor(sensorname):
+    
+    pin = getsensorconfig(sensorname)
+
+    atexit.register(grovepi.dust_sensor_dis)
+
+    print("Reading from the dust sensor")
+    grovepi.dust_sensor_en()
+
+    try:
+                [new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
+                if new_val:
+                    print(lowpulseoccupancy)
+                    sensordata = SensorValue(lowpulseoccupancy, 'none', 'Dust', 'location')
+                    return sensordata
+    except IOError:
+        print ("Error")
+            
 
 
 def gettempandhumidity(senorname):
     
     pin = getsensorconfig(sensorname)
+
 
     try:
         [temp,humidity] = grovepi.dht(pin,1)

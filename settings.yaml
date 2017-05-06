@@ -1,6 +1,8 @@
 core: 
   location: Office
   logfile: sensorlog.log
+  #polling interval is in seconds
+  pollinginterval: 10
   sensors:
     - loudness
     - airquality
