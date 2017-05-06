@@ -45,8 +45,11 @@ def main():
         print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
         print 'supported sensors: ' + str(supportedsenors)
 
-    else:
-        print 'Sensor Test or Autopolling was not specified so nothing is going to be done'
+    if args['sensortest'] == "all":
+        print "Testing all sensors"
+        for item in supportedsenors:
+            pin = getsensorconfig(args['sensortest'])
+            sensortest(args['sensortest'], pin, mockingmode)
 
 
 
