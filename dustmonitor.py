@@ -5,7 +5,7 @@ import logging
 import json
 import sys
 import datetime
-import sensorvalue
+from sensorvalue import SensorValue
 
 
 
