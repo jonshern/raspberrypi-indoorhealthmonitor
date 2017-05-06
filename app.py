@@ -53,7 +53,9 @@ def main():
         print "Looping through the sensors " + str(supportedsensors)
         for item in supportedsensors:
             data = getsensordata(item, mockingmode)
-            print data.yaml()
+            for item in data:
+                print item.yaml()
+
 
 
 
@@ -127,6 +129,8 @@ def getsensorfilename():
 
 def readdustsensor(sensorname):
     
+    sensordata = []
+
     pin = getsensorconfig(sensorname)
 
     atexit.register(grovepi.dust_sensor_dis)
@@ -142,12 +146,12 @@ def readdustsensor(sensorname):
 
                 if new_val:
                     print(lowpulseoccupancy)
-                    sensordata = SensorValue(lowpulseoccupancy, 'none', 'Dust', 'location')
-                    return sensordata
+                    sensordata.append(SensorValue(lowpulseoccupancy, 'none', 'Dust', 'location'))
+
     except IOError:
         print ("Error")
             
-
+    return sensordata
 
 def gettempandhumidity(sensorname):
     
@@ -169,11 +173,12 @@ def gettempandhumidity(sensorname):
 
 def getloudnessinfo(sensorname):
     
+    sensordata = []
     pin = getsensorconfig(sensorname)
     try:
         # Read the sound level
         sensor_value = grovepi.analogRead(pin)
-        sensordata = SensorValue(sensor_value, 'none', 'Loudness', 'location')
+        sensordata.append(SensorValue(sensor_value, 'none', 'Loudness', 'location'))
     
     except IOError:
         print ("Error")
@@ -183,6 +188,7 @@ def getloudnessinfo(sensorname):
 
 def getgassensorvalue(sensorname):
     
+    sensordata = []
     pin = getsensorconfig(sensorname)
     
     grovepi.pinMode(pin,"INPUT")
@@ -192,7 +198,7 @@ def getgassensorvalue(sensorname):
 
         # Calculate gas density - large value means more dense gas
         density = (float)(sensor_value / 1024)
-        sensordata = SensorValue(sensor_value, 'none', 'Gas', 'location')
+        sensordata.append(SensorValue(sensor_value, 'none', 'Gas', 'location'))
 
     except IOError:
         print ("Error")
@@ -203,6 +209,7 @@ def getgassensorvalue(sensorname):
 
 def getairqualitysensorvalue(sensorname):
     
+    sensordata = []
     pin = getsensorconfig(sensorname)
 
     grovepi.pinMode(pin,"INPUT")
@@ -217,7 +224,7 @@ def getairqualitysensorvalue(sensorname):
             print ("Low pollution")
         else:
             print ("Air fresh")
-        sensordata = SensorValue(sensor_value, 'none', 'airquality', 'location')
+        sensordata.append(SensorValue(sensor_value, 'none', 'airquality', 'location'))
     except IOError:
         print ("Error")
         
