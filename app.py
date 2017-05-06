@@ -44,7 +44,11 @@ def main():
     if args['sensortest'] in supportedsenors:
         pin = getsensorconfig(args['sensortest'])
         sensordata = getsensordata(args['sensortest'], mockingmode)
-        print sensordata.yaml()
+        
+        if sensordata == None:
+            print 'No data was returned by the sensor'
+        else:
+            print sensordata.yaml()
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsenors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
