@@ -155,7 +155,7 @@ def getairqualitysensorvalue(pin):
     while True:
         try:
             # Get sensor value
-            sensor_value = grovepi.analogRead(air_sensor)
+            sensor_value = grovepi.analogRead(pin)
 
             if sensor_value > 700:
                 print ("High pollution")
