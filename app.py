@@ -16,7 +16,7 @@ from config import settings
 def main():
     
     sensordatafile = getsensorfilename()
-    supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity', 'dust']
+    supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
     
     parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
@@ -39,10 +39,11 @@ def main():
     if args['sensortest'] in supportedsensors:
         sensordata = getsensordata(args['sensortest'], mockingmode)
 
-        if sensordata == None:
-            print 'No data was returned by the sensor'
-        else:
-            print sensordata.yaml()
+        for data in sensordata:
+            if data == None:
+                print 'No data was returned by the sensor'
+            else:
+                print data.yaml()
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsensors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
