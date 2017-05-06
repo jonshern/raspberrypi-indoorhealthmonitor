@@ -141,6 +141,10 @@ def readdustsensor(sensorname):
 
     try:
                 [new_val,lowpulseoccupancy] = grovepi.dustSensorRead()
+
+                print "new_val: " + str(new_val)
+                print "lowpulseoccupancy: " + str(lowpulseoccupancy)
+
                 if new_val:
                     print(lowpulseoccupancy)
                     sensordata = SensorValue(lowpulseoccupancy, 'none', 'Dust', 'location')
