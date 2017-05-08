@@ -20,6 +20,9 @@ Two modes
 2. Test a sensor to see if it is working
 
 
+Running the tests
+python -m unittest discover -p '*_test.py'
+
 
 
 

@@ -3,6 +3,7 @@ core:
   logfile: sensorlog.log
   #polling interval is in seconds
   pollinginterval: 10
+  display: lcdrgbbacklight
   configuredsensors:
     - loudness
     - gas

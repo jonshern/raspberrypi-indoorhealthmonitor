@@ -3,6 +3,7 @@ import grovepi
 import atexit
 import json
 import sys
+import logging
 
 import argparse
 
@@ -99,20 +100,25 @@ def getsensorconfig(sensorname):
 
 def getsensordata(sensorname, enablemocking):
 
-    
+
     if enablemocking:
         return
 
-    if sensorname == "loudness":
-        return getloudnessinfo(sensorname)
-    if sensorname == "airquality":
-        return getairqualitysensorvalue(sensorname)
-    if sensorname == "gas":
-        return getgassensorvalue(sensorname)
-    if sensorname == "tempandhumidity":
-        return gettempandhumidity(sensorname)
-    if sensorname == "dust":
-        return readdustsensor(sensorname)
+    try:
+
+        if sensorname == "loudness":
+            return getloudnessinfo(sensorname)
+        if sensorname == "airquality":
+            return getairqualitysensorvalue(sensorname)
+        if sensorname == "gas":
+            return getgassensorvalue(sensorname)
+        if sensorname == "tempandhumidity":
+            return gettempandhumidity(sensorname)
+        if sensorname == "dust":
+            return readdustsensor(sensorname)
+
+    except:
+        print sys.exc_info()[0]
 
 
 def startautopolling(configuredsensors, enablemocking):
@@ -131,7 +137,9 @@ def startautopolling(configuredsensors, enablemocking):
         values = []
 
         for item in configuredsensors:
-            values.append(getsensordata(item, enablemocking))
+            sensorvalue = getsensordata(item, enablemocking)
+            if sensorvalue != None:
+                values.append(sensorvalue)
 
         writetofile(values, sensordatafile)
 
