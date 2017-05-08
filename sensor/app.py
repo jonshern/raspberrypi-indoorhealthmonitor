@@ -15,8 +15,20 @@ from config import settings
 
 def main():
     
-    sensordatafile = getsensorfilename()
+    # two collections that really matter
+    #one is the list of sensors that are supported by this code.
     supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
+    
+    #two is the list of sensors configured in the settings.yaml file
+    configuredsensors = settings["core"]["configuredsensors"]
+
+
+    if not isconfigvalid(supportedsensors):
+        print 'Configuration is invalid'
+        return
+
+    sensordatafile = getsensorfilename()
+
     
     parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
     parser.add_argument(
@@ -39,11 +51,12 @@ def main():
     if args['sensortest'] in supportedsensors:
         sensordata = getsensordata(args['sensortest'], mockingmode)
 
-        for data in sensordata:
-            if data == None:
-                print 'No data was returned by the sensor'
-            else:
-                print data.yaml()
+        if sensordata != None:
+            for data in sensordata:
+                if data == None:
+                    print 'No data was returned by the sensor'
+                else:
+                    print data.yaml()
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsensors:
         print 'the sensor ' +  args['sensortest'] + ' is not supported'
@@ -59,6 +72,18 @@ def main():
 
 
 
+def isconfigvalid(supportedsensors):
+    configuredsensors = settings["core"]["configuredsensors"]
+
+    for sensor in configuredsensors:
+        if sensor not in supportedsensors:
+            print "The " + sensor + "sensor is not supported"
+            return False
+
+    return True
+        
+    
+    
 
 def getsensorconfig(sensorname):
     if sensorname in settings.keys():

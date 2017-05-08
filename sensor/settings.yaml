@@ -3,21 +3,11 @@ core:
   logfile: sensorlog.log
   #polling interval is in seconds
   pollinginterval: 10
-  sensors:
+  configuredsensors:
     - loudness
-    - airquality
-    - light
     - gas
     - tempandhumidity
-    - dust
-
-light: 
-  # Uses a digital port
-  port: 5
-
-airquality:
-  # Uses an analog port so if port was 0 it would A0
-  port: 0
+#    - dust
 
 loudness: 
   # Uses an analog port so if port was 0 it would A0
