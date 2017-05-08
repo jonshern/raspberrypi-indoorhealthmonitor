@@ -122,7 +122,7 @@ def startautopolling(supportedsenors, enablemocking):
 
     #start the polling loop
     while True:
-        if pollingintervalue != settings["core"]["pollinginterval"]:
+        if pollinginterval != settings["core"]["pollinginterval"]:
             print "polling interval changed from " + str(pollinginterval) + " to " + settings["core"]["pollinginterval"]
             pollinginterval = settings["core"]["pollinginterval"]
         
