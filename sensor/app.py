@@ -115,7 +115,7 @@ def getsensordata(sensorname, enablemocking):
         return readdustsensor(sensorname)
 
 
-def startautopolling(supportedsenors, enablemocking):
+def startautopolling(configuredsensors, enablemocking):
     
     print "Starting to Autopoll the sensors"
     pollinginterval = settings["core"]["pollinginterval"]
@@ -129,7 +129,7 @@ def startautopolling(supportedsenors, enablemocking):
         #check for a new polling interval
         values = []
 
-        for item in supportedsenors:
+        for item in configuredsensors:
             values.append(getsensordata(item, enablemocking))
 
         writetofile(values)
