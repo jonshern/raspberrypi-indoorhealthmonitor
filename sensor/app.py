@@ -46,7 +46,7 @@ def main():
         mockingmode = True
 
     if args['poll']:
-            startautopolling(supportedsensors, mockingmode)
+            startautopolling(configuredsensors, mockingmode)
 
     if args['sensortest'] in supportedsensors:
         sensordata = getsensordata(args['sensortest'], mockingmode)
