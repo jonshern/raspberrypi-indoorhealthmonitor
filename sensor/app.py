@@ -147,8 +147,9 @@ def startautopolling(configuredsensors, enablemocking):
 
 def writetofile(data, sensordatafile):
     with open(sensordatafile, 'ab') as f:
-        for item in data:
-            f.write(item.writecsv() + '\n')
+        for items in data:
+            for item in items:
+                f.write(item.writecsv() + '\n')
 
 
 def getsensorfilename():
