@@ -24,7 +24,7 @@ dust:
 tempandhumidity:
   #Uses a digital port so if the port was 3 it would D3
   #Apparently the only port you can use is port 4 
-  port: 4
+  port: 7
 
 
 

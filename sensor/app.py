@@ -181,11 +181,13 @@ def readdustsensor(sensorname):
 
 def gettempandhumidity(sensorname):
     
+    
+    
     pin = getsensorconfig(sensorname)
 
 
     try:
-        [temp,humidity] = grovepi.dht(pin,1)
+        [temp,humidity] = grovepi.dht(pin,0)
         print "temp =", temp, " humidity =", humidity
         
         sensordata = []
