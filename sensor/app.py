@@ -127,6 +127,7 @@ def startautopolling(supportedsenors, enablemocking):
             pollinginterval = settings["core"]["pollinginterval"]
         
         #check for a new polling interval
+        values = []
 
         for item in supportedsenors:
             values.append(getsensordata(item, enablemocking))
