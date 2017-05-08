@@ -119,6 +119,7 @@ def startautopolling(configuredsensors, enablemocking):
     
     print "Starting to Autopoll the sensors"
     pollinginterval = settings["core"]["pollinginterval"]
+    sensordatafile = getsensorfilename()
 
     #start the polling loop
     while True:
@@ -132,7 +133,7 @@ def startautopolling(configuredsensors, enablemocking):
         for item in configuredsensors:
             values.append(getsensordata(item, enablemocking))
 
-        writetofile(values)
+        writetofile(values, sensordatafile)
 
         time.sleep(pollinginterval)
 
@@ -144,7 +145,7 @@ def startautopolling(configuredsensors, enablemocking):
 
 
 
-def writetofile(data):
+def writetofile(data, sensordatafile):
     with open(sensorfilename, 'ab') as f:
         for item in data:
             f.write(item.writecsv() + '\n')
