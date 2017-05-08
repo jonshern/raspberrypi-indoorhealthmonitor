@@ -92,3 +92,5 @@ ENV/
 # Keys
 *.key
 *.pem*
+
+data/
