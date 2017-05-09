@@ -51,12 +51,12 @@ def main():
     if args['mock']:
         mockingmode = True
 
-    if args['notify']:
-        notifier.sendnotification("Test message",  "Test subject")
+    # if args['notify']:
+    #     notifier.sendnotification("Test message",  "Test subject")
 
 
     if args['poll']:
-            startautopolling(configuredsensors, mockingmode, sensorconfig)
+            startautopolling(sensorconfig.configuredsensors, mockingmode, sensorconfig)
 
     if args['sensortest'] in supportedsensors:
         sensordata = getsensordata(args['sensortest'], mockingmode, sensorconfig)
