@@ -2,6 +2,7 @@ core:
   location: Office
   logfile: sensorlog.log
   alertsenabled: true
+  snsarn: arn:aws:sns:us-west-2:623709041819:sherniottopic
   #polling interval is in seconds
   pollinginterval: 10
   displaymode: lcdrgbbacklight
@@ -11,10 +12,10 @@ core:
     - tempandhumidity
 #    - dust
 
-
 loudness: 
   # Uses an analog port so if port was 0 it would A0
   port: 1
+
 
 gas:
   # Uses an analog port
