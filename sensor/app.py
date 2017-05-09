@@ -143,7 +143,7 @@ def startautopolling(configuredsensors, enablemocking, sensorconfig):
         values = []
 
         for item in configuredsensors:
-            sensorvalue = getsensordata(item, enablemocking)
+            sensorvalue = getsensordata(item, enablemocking, sensorconfig)
             if sensorvalue != None:
                 values.append(sensorvalue)
 
