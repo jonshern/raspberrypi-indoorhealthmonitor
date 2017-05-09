@@ -12,6 +12,9 @@ from datetime import datetime
 
 # get import working from a directory
 from sensorvalue import SensorValue
+from sensorconfig import SensorConfig
+import notifier
+
 from config import settings
 
 def main():
@@ -19,12 +22,12 @@ def main():
     # two collections that really matter
     #one is the list of sensors that are supported by this code.
     supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
-    
+
+    sensorconfig = SensorConfig(settings)
+
     #two is the list of sensors configured in the settings.yaml file
-    configuredsensors = settings["core"]["configuredsensors"]
 
-
-    if not isconfigvalid(supportedsensors):
+    if not sensorconfig.isconfigvalid(supportedsensors):
         print 'Configuration is invalid'
         return
 
@@ -38,6 +41,8 @@ def main():
     parser.add_argument('-s', '--sensortest', help='Name of the sensor to test. Supported sensors: ' + str(supportedsensors), default='nosensor')
 
     parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
+    parser.add_argument('-n', '--notify', help='Perform a notification test', action='store_true')
+
     args = vars(parser.parse_args())
 
     parser.print_usage()
@@ -46,11 +51,15 @@ def main():
     if args['mock']:
         mockingmode = True
 
+    if args['notify']:
+        notifier.sendnotification("Test message",  "Test subject")
+
+
     if args['poll']:
-            startautopolling(configuredsensors, mockingmode)
+            startautopolling(configuredsensors, mockingmode, sensorconfig)
 
     if args['sensortest'] in supportedsensors:
-        sensordata = getsensordata(args['sensortest'], mockingmode)
+        sensordata = getsensordata(args['sensortest'], mockingmode, sensorconfig)
 
         if sensordata != None:
             for data in sensordata:
@@ -64,27 +73,23 @@ def main():
         print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
         print 'supported sensors: ' + str(supportedsensors)
 
+
+    # The all case loops through all of the configured sensors and prints out there values
     if args['sensortest'] == "all":
-        print "Looping through the sensors " + str(supportedsensors)
-        for item in supportedsensors:
-            data = getsensordata(item, mockingmode)
+        print "Looping through the sensors " + str(sensorconfig.configuredsensors)
+        for item in sensorconfig.configuredsensors:
+            data = getsensordata(item, mockingmode, sensorconfig)
+
+            if data == None:
+                print "No Data was returned"
+                print "Exiting...."
+                return
+
             for item in data:
                 print item.yaml()
 
 
 
-def isconfigvalid(supportedsensors):
-    configuredsensors = settings["core"]["configuredsensors"]
-
-    for sensor in configuredsensors:
-        if sensor not in supportedsensors:
-            print "The " + sensor + "sensor is not supported"
-            return False
-
-    return True
-        
-    
-    
 
 def getsensorconfig(sensorname):
     if sensorname in settings.keys():
@@ -98,7 +103,8 @@ def getsensorconfig(sensorname):
     
     
 
-def getsensordata(sensorname, enablemocking):
+def getsensordata(sensorname, enablemocking, sensorconfig):
+
 
 
     if enablemocking:
@@ -121,7 +127,7 @@ def getsensordata(sensorname, enablemocking):
         print sys.exc_info()[0]
 
 
-def startautopolling(configuredsensors, enablemocking):
+def startautopolling(configuredsensors, enablemocking, sensorconfig):
     
     print "Starting to Autopoll the sensors"
     pollinginterval = settings["core"]["pollinginterval"]

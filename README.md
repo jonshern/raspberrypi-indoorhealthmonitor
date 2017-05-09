@@ -30,3 +30,34 @@ python -m unittest discover -p '*_test.py'
 
 
 settings.yaml
+
+
+
+## Ideas for making this better
+
+Write the data to AWS IOT
+
+Add a rules engine dsl language like cloud custodian in order to author alerts
+    Example
+    policies:
+    - name: dangerous-gas-levels
+        resource: gas
+        threshold: gt 50
+        actions: pusheralert 
+
+Take the same alerts and apply them to a mesh of sensors with more logic.
+Like gas gt 50 and temp lt 30 or any gas gt 50
+
+
+Senior Check in App
+Mobile app that allows family members to say that they talked to Senior
+ALso a way to register sensor.
+An example would be a loudness sensor.  It would be super cool to see the loudness at a family members house to get an idea that they had watched tv that day.
+Eventually train the data so it would know that you watched tv, etc.
+
+Somethign like "Did you just watch tv?  from x to y?  You say yes, and the next time it records it.
+That way you can get a feeling that your parent was watching tv, and is doing ok.
+Kind of like a dashboard for your senior parents, with an activity log with sensor data and check in data.
+
+
+

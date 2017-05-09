@@ -1,14 +1,16 @@
 core: 
   location: Office
   logfile: sensorlog.log
+  alertsenabled: true
   #polling interval is in seconds
   pollinginterval: 10
-  display: lcdrgbbacklight
+  displaymode: lcdrgbbacklight
   configuredsensors:
     - loudness
     - gas
     - tempandhumidity
 #    - dust
+
 
 loudness: 
   # Uses an analog port so if port was 0 it would A0
