@@ -7,15 +7,20 @@ core:
   pollinginterval: 10
   displaymode: lcdrgbbacklight
   configuredsensors:
-    - loudness
-    - gas
-    - tempandhumidity
+    - name: loudness
+      port: 1
+      unit: notsure
+    - name: gas
+      port: 2
+      unit: notsure
+    - name: tempandhumidity
+      port: 7
+      unit: notsure
 #    - dust
 
 loudness: 
   # Uses an analog port so if port was 0 it would A0
   port: 1
-
 
 gas:
   # Uses an analog port
