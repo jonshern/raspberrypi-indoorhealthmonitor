@@ -14,11 +14,12 @@ class Sensor(object):
 
 
 
-    def readdustsensor(self, sensorname):
+    def readdustsensor(self, config):
         
         sensordata = []
 
-        pin = getsensorconfig(sensorname)
+        pin = config.configuredsensors['dustsensor'], item['port']
+
 
         atexit.register(grovepi.dust_sensor_dis)
 
@@ -40,9 +41,10 @@ class Sensor(object):
                 
         return sensordata
 
-    def gettempandhumidity(self, sensorname):
+    def gettempandhumidity(self, config):
         
-        pin = getsensorconfig(sensorname)
+        pin = config.configuredsensors['tempandhumidity'], item['port']
+
         dht_sensor_type = 0             # change this depending on your sensor type - see header comment
 
 
@@ -59,10 +61,10 @@ class Sensor(object):
         return sensordata
         
 
-    def getloudnessinfo(self, sensorname):
+    def getloudnessinfo(self, config):
         
         sensordata = []
-        pin = getsensorconfig(sensorname)
+        pin = config.configuredsensors['loudness'], item['port']
         try:
             # Read the sound level
             sensor_value = grovepi.analogRead(pin)
@@ -74,10 +76,12 @@ class Sensor(object):
         return sensordata
 
 
-    def getgassensorvalue(self, sensorname):
+    def getgassensorvalue(self, config):
         
         sensordata = []
-        pin = getsensorconfig(sensorname)
+
+        pin = config.configuredsensors['gas'], item['port']
+
         
         grovepi.pinMode(pin,"INPUT")
         try:
@@ -95,7 +99,7 @@ class Sensor(object):
         return sensordata
 
 
-    def getairqualitysensorvalue(self, sensorname):
+    def getairqualitysensorvalue(self, config):
         
         sensordata = []
         pin = getsensorconfig(sensorname)

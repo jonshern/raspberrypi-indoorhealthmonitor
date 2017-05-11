@@ -1,3 +1,4 @@
+from __future__ import print_function
 import sys
 import time
 import grovepi
@@ -5,7 +6,7 @@ import atexit
 import json
 import sys
 import logging
-from __future__ import print_function
+
 
 sys.path.append('lib/')
 
@@ -26,13 +27,16 @@ def main():
     #one is the list of sensors that are supported by this code.
     supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
 
-    sensorconfig = SensorConfig(settings)
+    settings = Config.loadfile('settings.yaml')
 
+    sensorconfig = Config()
+    sensorconfig.initializeconfig(settings)
+    
 
     #two is the list of sensors configured in the settings.yaml file
 
     if not sensorconfig.isconfigvalid(supportedsensors):
-        print 'Configuration is invalid'
+        print('Configuration is invalid')
         return
 
     sensordatafile = getsensorfilename()
@@ -67,41 +71,30 @@ def main():
         if sensordata != None:
             for data in sensordata:
                 if data == None:
-                    print 'No data was returned by the sensor'
+                    print('No data was returned by the sensor')
                 else:
-                    print data.yaml()
+                    print(data.yaml())
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsensors:
-        print 'the sensor ' +  args['sensortest'] + ' is not supported'
-        print 'currently using a dictionary called supportedsensors at the top of this file to manage this list'
-        print 'supported sensors: ' + str(supportedsensors)
+        print ('the sensor ' +  args['sensortest'] + ' is not supported')
+        print ('currently using a dictionary called supportedsensors at the top of this file to manage this list')
+        print ('supported sensors: ' + str(supportedsensors))
 
 
     # The all case loops through all of the configured sensors and prints out there values
     if args['sensortest'] == "all":
-        print "Looping through the sensors " + str(sensorconfig.configuredsensors)
+        print ("Looping through the sensors " + str(sensorconfig.configuredsensors))
         for item in sensorconfig.configuredsensors:
             data = getsensordata(item, mockingmode, sensorconfig)
 
             if data == None:
-                print "No Data was returned"
-                print "Exiting...."
+                print ("No Data was returned")
+                print ("Exiting....")
                 return
 
             for item in data:
-                print item.yaml()
+                print (item.yaml())
 
-
-
-
-def getsensorconfig(sensorname):
-    if sensorname in settings.keys():
-        print sensorname + " is configured for port " + str(settings[sensorname]["port"])
-
-        return settings[sensorname]["port"]
-    else:
-        print "missing config value for " + sensorname
-        return
 
 
 def getsensordata(sensorname, enablemocking, sensorconfig):
@@ -114,30 +107,30 @@ def getsensordata(sensorname, enablemocking, sensorconfig):
     try:
 
         if sensorname == "loudness":
-            return sensor.getloudnessinfo(sensorname)
+            return sensor.getloudnessinfo(sensorconfig)
         if sensorname == "airquality":
-            return sensor.getairqualitysensorvalue(sensorname)
+            return sensor.getairqualitysensorvalue(sensorconfig)
         if sensorname == "gas":
-            return sensor.getgassensorvalue(sensorname)
+            return sensor.getgassensorvalue(sensorconfig)
         if sensorname == "tempandhumidity":
-            return sensor.gettempandhumidity(sensorname)
+            return sensor.gettempandhumidity(sensorconfig)
         if sensorname == "dust":
-            return sensor.readdustsensor(sensorname)
+            return sensor.readdustsensor(sensorconfig)
     except:
-        print sys.exc_info()[0]
+        print (sys.exc_info()[0])
 
 
 
 def startautopolling(configuredsensors, enablemocking, sensorconfig):
     
-    print "Starting to Autopoll the sensors"
+    print ("Starting to Autopoll the sensors")
     pollinginterval = settings["core"]["pollinginterval"]
     sensordatafile = getsensorfilename()
 
     #start the polling loop
     while True:
         if pollinginterval != settings["core"]["pollinginterval"]:
-            print "polling interval changed from " + str(pollinginterval) + " to " + settings["core"]["pollinginterval"]
+            print ("polling interval changed from " + str(pollinginterval) + " to " + settings["core"]["pollinginterval"])
             pollinginterval = settings["core"]["pollinginterval"]
         
         #check for a new polling interval

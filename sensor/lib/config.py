@@ -7,7 +7,7 @@ class Config(object):
     alerts = ''
     pollinginterval = ''
     displaymode = ''
-    configuredsensors = []
+    configuredsensors = dict()
     snsarn = ''
 
 
@@ -20,7 +20,7 @@ class Config(object):
         self.alertsenabled = ""
         self.pollinginterval = ""
         self.displaymode = ""
-        self.configuredsensors = []
+        self.configuredsensors = dict()
         self.snsarn = ""
         
         
@@ -42,14 +42,14 @@ class Config(object):
         self.alertsenabled = settings["core"]["alertsenabled"]
         self.pollinginterval = settings["core"]["pollinginterval"]
         self.displaymode = settings["core"]["displaymode"]
-        configuredsensors = settings["core"]["configuredsensors"]
+        self.configuredsensors = settings["core"]["configuredsensors"]
 
         
-        self.snsarn = settings["core"]["snsarn"]
+        # self.snsarn = settings["core"]["snsarn"]
 
 
-        for item in configuredsensors:
-            self.configuredsensors.append(SensorConfig(item['name'], item['port']))
+        # for item in configuredsensors:
+        #     self.configuredsensors.append(SensorConfig(item['name'], item['port']))
 
 
     @staticmethod

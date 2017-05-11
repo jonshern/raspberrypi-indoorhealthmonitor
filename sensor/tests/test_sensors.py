@@ -11,6 +11,8 @@ from sensorvalue import SensorValue
 from sensorconfig import SensorConfig
 from config import Config
 
+import app
+
 
 # import app
 import grovepi
@@ -44,10 +46,37 @@ def test_configsensorvalues():
     #     print str(item)
     assert config.location != ""
     assert len(config.configuredsensors) > 1
-    
+
     for item in config.configuredsensors:
         assert item.port != ""
         assert item.name != ""
+
+
+def test_configsensorvalues(mocker):
+    mocker.patch.object(Sensor, 'getloudnessinfo', autospec=True)
+
+    settings = Config.loadfile('../settings.yaml')
+
+    config = Config()
+    config.initializeconfig(settings)
+
+    assert config.configuredsensors['loudness']['port'] == 1
+
+    data = app.getsensordata('loudness', False, config)
+
+    assert Sensor.getloudnessinfo.assert_called_once_with(config)
+
+
+    # for item in config.configuredsensors:
+    #     print str(item)
+    # assert config.location != ""
+    # assert len(config.configuredsensors) > 1
+
+    # for item in config.configuredsensors:
+    #     assert item.port != ""
+    #     assert item.name != ""
+
+
 
 
 
