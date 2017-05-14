@@ -43,7 +43,7 @@ class Sensor(object):
 
     def gettempandhumidity(self, config):
         
-        pin = config.configuredsensors['tempandhumidity'], item['port']
+        pin = config.configuredsensors['tempandhumidity'].port
 
         dht_sensor_type = 0             # change this depending on your sensor type - see header comment
 
@@ -64,7 +64,7 @@ class Sensor(object):
     def getloudnessinfo(self, config):
         
         sensordata = []
-        pin = config.configuredsensors['loudness'], item['port']
+        pin = config.configuredsensors['loudness'].port
         try:
             # Read the sound level
             sensor_value = grovepi.analogRead(pin)
@@ -80,7 +80,7 @@ class Sensor(object):
         
         sensordata = []
 
-        pin = config.configuredsensors['gas'], item['port']
+        pin = config.configuredsensors['gas'].port
 
         
         grovepi.pinMode(pin,"INPUT")
@@ -102,8 +102,7 @@ class Sensor(object):
     def getairqualitysensorvalue(self, config):
         
         sensordata = []
-        pin = getsensorconfig(sensorname)
-
+        pin = config.configuredsensors['airquality'].port
         grovepi.pinMode(pin,"INPUT")
 
         try:

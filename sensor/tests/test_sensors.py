@@ -1,5 +1,12 @@
 import pytest
+from mock import MagicMock, patch
+mymodule = MagicMock()
+mymodule.return_value = 10
+
+
 import sys
+sys.modules["grovepi"] = mymodule
+
 import pytest_mock
 import mock
 import grovepi
@@ -14,57 +21,65 @@ from config import Config
 import app
 
 
-# import app
-import grovepi
+# Running Tests
+# Run this command pytest --capture=no  
+# This will also show the print statements
 
 
 
 
 
-    # @mock.patch('app.grovepi.analogRead')
-    
-    # def test_tempandhumidity(self, mock_tempandhumidity):
-    #     gettempandhumidity('fakesensor')
-    #     mock_tempandhumidity.remove.assert_called_with('fakesensor')
+# def test_configloading():
+#     settings = Config.loadfile('../settings.yaml')
+#     assert settings != None
+#     assert settings["core"] != None 
 
-    # def test_tempandhumidity(self, mock_analogread):
-    #     getloudnessinfo('fakesensor')
-    #     mock_tempandhumidity.remove.assert_called_with(4)
+# def test_configsensorvalues():
+#     settings = Config.loadfile('../settings.yaml')
 
-def test_configloading():
-    settings = Config.loadfile('../settings.yaml')
-    assert settings != None
-    assert settings["core"] != None 
+#     config = Config()
+#     config.initializeconfig(settings)
 
-def test_configsensorvalues():
-    settings = Config.loadfile('../settings.yaml')
+#     # for item in config.configuredsensors:
+#     #     print str(item)
+#     assert config.location != ""
+#     assert len(config.configuredsensors) > 1
 
-    config = Config()
-    config.initializeconfig(settings)
-
-    # for item in config.configuredsensors:
-    #     print str(item)
-    assert config.location != ""
-    assert len(config.configuredsensors) > 1
-
-    for item in config.configuredsensors:
-        assert item.port != ""
-        assert item.name != ""
+#     for item in config.configuredsensors:
+#         assert item.port != ""
+#         assert item.name != ""
 
 
 def test_configsensorvalues(mocker):
-    mocker.patch.object(Sensor, 'getloudnessinfo', autospec=True)
-
     settings = Config.loadfile('../settings.yaml')
 
     config = Config()
     config.initializeconfig(settings)
 
-    assert config.configuredsensors['loudness']['port'] == 1
 
-    data = app.getsensordata('loudness', False, config)
 
-    assert Sensor.getloudnessinfo.assert_called_once_with(config)
+
+    print "port " + str(config.configuredsensors['loudness'].port)
+    print "port " + str(config.configuredsensors['loudness'].name)
+
+ 
+    assert config.configuredsensors['loudness'].port == 1
+
+
+    sensor = Sensor(config)
+
+    data = sensor.getloudnessinfo(config)
+
+
+
+    for item in data:
+        print "Sensor value: " + str(item.value)
+
+    # print str(data.value)
+
+
+
+    # mymodule.assert_called_once()
 
 
     # for item in config.configuredsensors:
