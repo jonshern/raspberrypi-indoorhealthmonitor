@@ -63,6 +63,10 @@ Kind of like a dashboard for your senior parents, with an activity log with sens
 ## Python Testing Articles
 [Pytest Asserts](https://docs.pytest.org/en/latest/assert.html)
 
+[Pytest Basic patterns and example](https://docs.pytest.org/en/latest/example/simple.html#writing-well-integrated-assertion-helpers)
+
+[Pytest Example](https://docs.pytest.org/en/latest/example/simple.html#freezing-pytest)
+
 [Mocking External APIs in Python](https://realpython.com/blog/python/testing-third-party-apis-with-mocks/)
 
 [Python Mock Gotchas](http://alexmarandon.com/articles/python_mock_gotchas/)
@@ -77,3 +81,16 @@ Kind of like a dashboard for your senior parents, with an activity log with sens
 
 [Python Mock Documentation](https://docs.python.org/3/library/unittest.mock.html)
 
+[Pytest - Mock](https://pypi.python.org/pypi/pytest-mock)
+
+[Python unit testing with pytest and mock](https://medium.com/@bfortuner/python-unit-testing-with-pytest-and-mock-197499c4623c)
+
+[Mocks and monkeypatching in python](https://krzysztofzuraw.com/blog/2016/mocks-monkeypatching-in-python.html)
+
+[Mocks and monkeypatching in python](https://semaphoreci.com/community/tutorials/mocks-and-monkeypatching-in-python)
+
+[pytest more advanced features for easier testing](http://programeveryday.com/post/pytest-more-advanced-features-for-easier-testing/)
+
+[Python mocks - Gentle introduction](http://blog.thedigitalcatonline.com/blog/2016/03/06/python-mocks-a-gentle-introduction-part-1/)
+
+[Python mocks - Gentle introduction](http://blog.thedigitalcatonline.com/blog/2016/09/27/python-mocks-a-gentle-introduction-part-2/)
