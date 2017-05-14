@@ -1,6 +1,7 @@
 import pytest
+import mock
 from mock import MagicMock, patch
-mymodule = MagicMock()
+mymodule = MagicMock(return_value = 3)
 
 import sys
 sys.modules["grovepi"] = mymodule
@@ -19,7 +20,7 @@ from sensorvalue import SensorValue
 from sensorconfig import SensorConfig
 from config import Config
 
-import app
+import iothelper
 
 
 
@@ -53,14 +54,21 @@ import app
 #         assert item.name != ""
 
 
+@mock.patch('sensor.Sensor', autospec=True)
+def test_correctsensorgetscalled(mocker):
+    
+    settings = Config.loadfile('../settings.yaml')
+
+    config = Config()
+    config.initializeconfig(settings)
+    data = iothelper.getsensordata("loudness", False, config)
+
+    #mocker.getloudnessinfo.assert_called_once()
+
+
+
 def test_configsensorvalues(mocker):
     
-
-
-    mymodule = MagicMock()
-    sys.modules["grovepi"] = mymodule
-
-
     settings = Config.loadfile('../settings.yaml')
 
     config = Config()
@@ -83,48 +91,7 @@ def test_configsensorvalues(mocker):
 
 
 
-
-
-    # print str(data.value)
-
-
-
-    # mymodule.assert_called_once()
-
-
-    # for item in config.configuredsensors:
-    #     print str(item)
-    # assert config.location != ""
-    # assert len(config.configuredsensors) > 1
-
-    # for item in config.configuredsensors:
-    #     assert item.port != ""
-    #     assert item.name != ""
-
-
-
-
 def test_filenametest():
     '''Perform a basic test to see how unit tests show up'''
     assert True
-
-# def test_mockingstuff(mocker):
-#     mocker.patch('sensor.Sensor.gettempandhumidity')
-#     mocker.patch('sensor.Sensor.readdustsensor')
-#     mocker.patch('sensor.Sensor.getloudnessinfo')
-#     mocker.patch('sensor.Sensor.getgassensorvalue')
-#     mocker.patch('sensor.Sensor.getairqualitysensorvalue'
-
-
-#     config.pollinginterval = 10
-    
-#     data = app.getsensordata('loudness', False, config)
-
-#     sensor.Sensor.assert_called_once_with('1')
-
-    
-
-
-# def test_mockinggrove(mocker):
-#     mocker.patch('grovepi.grovepi.analogRead')
 
