@@ -1,8 +1,6 @@
 import pytest
 from mock import MagicMock, patch
 mymodule = MagicMock()
-mymodule.return_value = 10
-
 
 import sys
 sys.modules["grovepi"] = mymodule
@@ -10,6 +8,9 @@ sys.modules["grovepi"] = mymodule
 import pytest_mock
 import mock
 import grovepi
+import unittest
+
+
 sys.path.append('../lib/')
 sys.path.append('../')
 
@@ -21,10 +22,12 @@ from config import Config
 import app
 
 
+
+
+
 # Running Tests
 # Run this command pytest --capture=no  
 # This will also show the print statements
-
 
 
 
@@ -51,12 +54,17 @@ import app
 
 
 def test_configsensorvalues(mocker):
+    
+
+
+    mymodule = MagicMock()
+    sys.modules["grovepi"] = mymodule
+
+
     settings = Config.loadfile('../settings.yaml')
 
     config = Config()
     config.initializeconfig(settings)
-
-
 
 
     print "port " + str(config.configuredsensors['loudness'].port)
@@ -64,16 +72,18 @@ def test_configsensorvalues(mocker):
 
  
     assert config.configuredsensors['loudness'].port == 1
-
-
     sensor = Sensor(config)
 
     data = sensor.getloudnessinfo(config)
 
-
+    assert data != None
 
     for item in data:
         print "Sensor value: " + str(item.value)
+
+
+
+
 
     # print str(data.value)
 
@@ -90,8 +100,6 @@ def test_configsensorvalues(mocker):
     # for item in config.configuredsensors:
     #     assert item.port != ""
     #     assert item.name != ""
-
-
 
 
 
