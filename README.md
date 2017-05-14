@@ -60,6 +60,20 @@ That way you can get a feeling that your parent was watching tv, and is doing ok
 Kind of like a dashboard for your senior parents, with an activity log with sensor data and check in data.
 
 
+## Python Testing Articles
+[Pytest Asserts](https://docs.pytest.org/en/latest/assert.html)
 
+[Mocking External APIs in Python](https://realpython.com/blog/python/testing-third-party-apis-with-mocks/)
 
+[Python Mock Gotchas](http://alexmarandon.com/articles/python_mock_gotchas/)
+
+[Python Patch Decorators](http://www.voidspace.org.uk/python/mock/patch.html#where-to-patch)
+
+[Python Testing Tools](https://wiki.python.org/moin/PythonTestingToolsTaxonomy)
+
+[Python Unit Testing with Mock - Part One](https://dev.to/mistermocha/python-unit-testing-with-mock---part-one)
+
+[Python Unit Testing with Mock - Part Two](https://dev.to/mistermocha/python-unit-testing-with-mock---part-two)
+
+[Python Mock Documentation](https://docs.python.org/3/library/unittest.mock.html)
 

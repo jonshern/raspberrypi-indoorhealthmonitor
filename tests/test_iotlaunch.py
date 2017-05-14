@@ -15,14 +15,14 @@ sys.path.append('../')
 from sensor import Sensor 
 from sensorvalue import SensorValue
 from sensorconfig import SensorConfig
-from config import Config
+from iotconfig import IOTConfig
 
 import iothelper
 
 
 
 
-@mock.patch('config.Config', autospec=True)
+@patch.object(IOTConfig, 'initializefromfile')
 def test_parameterstest(mocker):
 
     args = iothelper.parser_args(['-sloudness'])
