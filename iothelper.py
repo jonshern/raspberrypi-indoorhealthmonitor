@@ -1,37 +1,45 @@
 from __future__ import print_function
 import sys
+sys.path.append('lib/')
 import time
 import grovepi
 import atexit
 import json
 import sys
 import logging
-
-
-sys.path.append('lib/')
-
-
 import argparse
-
 from datetime import datetime
-
 # get import working from a directory
 from sensorvalue import SensorValue
 from sensorconfig import SensorConfig
 from sensor import Sensor
+from iotconfig import IOTConfig
 import notifier
 
-def main():
+def main(args):
     
-    # two collections that really matter
-    #one is the list of sensors that are supported by this code.
     supportedsensors = ['loudness', 'airquality', 'gas', 'tempandhumidity']
 
-    settings = Config.loadfile('settings.yaml')
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
 
-    sensorconfig = Config()
-    sensorconfig.initializeconfig(settings)
-    
+    # create a file handler
+    handler = logging.FileHandler('hello.log')
+    handler.setLevel(logging.INFO)
+
+    # create a logging format
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    handler.setFormatter(formatter)
+
+    # add the handlers to the logger
+    logger.addHandler(handler)
+
+
+    args = parser_args(sys.argv[1:])
+
+    #Load and initialize the config file
+    sensorconfig = IOTConfig()
+    sensorconfig.initializefromfile(args['configfile'])
 
     #two is the list of sensors configured in the settings.yaml file
 
@@ -41,19 +49,8 @@ def main():
 
     sensordatafile = getsensorfilename()
 
-    
-    parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
-    parser.add_argument(
-        '-p', '--poll', help='Poll all sensors in the config file at the configured interval', action='store_true')
 
-    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test. Supported sensors: ' + str(supportedsensors), default='nosensor')
 
-    parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
-    parser.add_argument('-n', '--notify', help='Perform a notification test', action='store_true')
-
-    args = vars(parser.parse_args())
-
-    parser.print_usage()
 
     mockingmode = False
     if args['mock']:
@@ -94,6 +91,28 @@ def main():
 
             for item in data:
                 print (item.yaml())
+
+
+
+
+
+def parser_args(args):
+    
+    print (str(args))
+
+    parser = argparse.ArgumentParser(description='Use this to poll sensor data from raspberry pi and the grove pi')
+    parser.add_argument(
+        '-p', '--poll', help='Poll all sensors in the config file at the configured interval', action='store_true')
+    parser.add_argument('-s', '--sensortest', help='Name of the sensor to test.', default='nosensor')
+    parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
+    parser.add_argument('-c', '--configfile', help='Specify Settings file', default='settings.yaml')
+    parser.add_argument('-n', '--notify', help='Perform a notification test', action='store_true')
+    args = vars(parser.parse_args(args))
+    parser.print_usage()
+
+    return args
+    
+
 
 
 
@@ -163,5 +182,5 @@ def getsensorfilename():
 
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv[1:])
 

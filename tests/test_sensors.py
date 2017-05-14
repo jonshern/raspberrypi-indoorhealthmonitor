@@ -23,35 +23,10 @@ from config import Config
 import iothelper
 
 
-
-
-
 # Running Tests
 # Run this command pytest --capture=no  
 # This will also show the print statements
 
-
-
-
-# def test_configloading():
-#     settings = Config.loadfile('../settings.yaml')
-#     assert settings != None
-#     assert settings["core"] != None 
-
-# def test_configsensorvalues():
-#     settings = Config.loadfile('../settings.yaml')
-
-#     config = Config()
-#     config.initializeconfig(settings)
-
-#     # for item in config.configuredsensors:
-#     #     print str(item)
-#     assert config.location != ""
-#     assert len(config.configuredsensors) > 1
-
-#     for item in config.configuredsensors:
-#         assert item.port != ""
-#         assert item.name != ""
 
 
 @mock.patch('sensor.Sensor', autospec=True)

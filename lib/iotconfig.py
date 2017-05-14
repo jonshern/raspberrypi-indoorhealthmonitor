@@ -1,7 +1,7 @@
 import yaml
 from sensorconfig import SensorConfig
 
-class Config(object):
+class IOTConfig(object):
     location = ''
     logfile = ''
     alerts = ''
@@ -9,10 +9,6 @@ class Config(object):
     displaymode = ''
     configuredsensors = dict()
     snsarn = ''
-
-
-
-
 
     def __init__(self):
         self.location = ""
@@ -36,7 +32,7 @@ class Config(object):
     #     self.configuredsensors = configuredsensors
     #     self.snsarn = snsarn
 
-    def initializeconfig(self, settings):
+    def initializefromdictionary(self, settings):
         self.location = settings["core"]["location"]
         self.logfile = settings["core"]["logfile"]
         self.alertsenabled = settings["core"]["alertsenabled"]
@@ -47,12 +43,15 @@ class Config(object):
             sensor = SensorConfig(item['name'], item['port'])
             self.configuredsensors[item['name']] = sensor
 
-
-    @staticmethod
-    def loadfile(filename):
+    def initializefromfile(self, filename):
         with open(filename, "r") as f:
             settings = yaml.load(f)
-            return settings
+
+        self.initializefromdictionary(settings)
+
+
+
+
 
 
     def isconfigvalid(self, supportedsensors):
