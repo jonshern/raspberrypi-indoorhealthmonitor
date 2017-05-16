@@ -9,6 +9,10 @@ class IOTConfig(object):
     displaymode = ''
     configuredsensors = dict()
     snsarn = ''
+    host = ""
+    rootCAPath = ""
+    cognitoIdentityPoolID = ""
+
 
     def __init__(self):
         self.location = ""
@@ -18,8 +22,13 @@ class IOTConfig(object):
         self.displaymode = ""
         self.configuredsensors = dict()
         self.snsarn = ""
+        self.host = ""
+        self.rootCAPath = ""
+        self.cognitoIdentityPoolID = ""
+
         
         
+
 
 
 
@@ -38,6 +47,10 @@ class IOTConfig(object):
         self.alertsenabled = settings["core"]["alertsenabled"]
         self.pollinginterval = settings["core"]["pollinginterval"]
         self.displaymode = settings["core"]["displaymode"]
+
+        self.host = settings["aws"]["host"]
+        self.rootCAPath = settings["aws"]["rootCAPath"]
+        self.cognitoIdentityPoolID = settings["aws"]["cognitoIdentityPoolID"]
 
         for item in settings["core"]["configuredsensors"]:
             sensor = SensorConfig(item['name'], item['port'])
