@@ -14,6 +14,7 @@ from sensorvalue import SensorValue
 from sensorconfig import SensorConfig
 from sensor import Sensor
 from iotconfig import IOTConfig
+from awsiot import AWSIOT
 import notifier
 
 def main(args):
@@ -24,7 +25,7 @@ def main(args):
     logger.setLevel(logging.INFO)
 
     # create a file handler
-    handler = logging.FileHandler('hello.log')
+    handler = logging.FileHandler('iotmonitor.log')
     handler.setLevel(logging.INFO)
 
     # create a logging format
@@ -70,6 +71,10 @@ def main(args):
                 if data == None:
                     print('No data was returned by the sensor')
                 else:
+                    
+                    if(args['cloud'])
+
+
                     print(data.yaml())
 
     if args['sensortest'] in ['nosensor'] and args['sensortest'] not in supportedsensors:
@@ -93,6 +98,9 @@ def main(args):
                 print (item.yaml())
 
 
+def senddatatocloud(message):
+    iotclient = AWSIOT()
+
 
 
 
@@ -107,6 +115,7 @@ def parser_args(args):
     parser.add_argument('-m', '--mock', help='Do a mock sensor test', action='store_true')
     parser.add_argument('-c', '--configfile', help='Specify Settings file', default='settings.yaml')
     parser.add_argument('-n', '--notify', help='Perform a notification test', action='store_true')
+    parser.add_argument('-c', '--cloud', help='Send data to AWS IOT Service', action='store_true')
     args = vars(parser.parse_args(args))
     parser.print_usage()
 

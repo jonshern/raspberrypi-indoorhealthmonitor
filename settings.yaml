@@ -18,22 +18,8 @@ core:
       unit: notsure
 #    - dust
 
-loudness: 
-  # Uses an analog port so if port was 0 it would A0
-  port: 1
 
-gas:
-  # Uses an analog port
-  port: 2
-
-dust:
-  # this is fixed at port d2
-  port: 2
-
-tempandhumidity:
-  #Uses a digital port so if the port was 3 it would D3
-  #Apparently the only port you can use is port 4 
-  port: 7
-
-
-
+aws:
+  host: puthosthere
+  rootCAPath: apath
+  cognitoIdentityPoolID: something
